@@ -4,12 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:background="@android:color/white"
     tools:context=".view.MainActivity">
+
+
+    <Spinner
+        android:id="@+id/categorySpinner"
+
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:entries="@array/categories"
+        android:prompt="@string/search_by" />
 
     <ProgressBar
         android:id="@+id/progress_circular"
         android:layout_width="wrap_content"
+        android:layout_below="@+id/categorySpinner"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true" />
@@ -18,6 +32,7 @@
         android:id="@+id/my_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="60dp"
         android:scrollbars="vertical" />
 
 

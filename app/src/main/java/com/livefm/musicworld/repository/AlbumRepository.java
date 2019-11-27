@@ -23,17 +23,15 @@ import retrofit2.Response;
 public class AlbumRepository {
     private static final String TAG = AlbumRepository.class.getSimpleName();
     private ApiRequest apiRequest;
-
+    private MutableLiveData<ServerResponse> data = new MutableLiveData<>();
     public AlbumRepository() {
         apiRequest = NetworkRequestor.getRetrofitInstance().create(ApiRequest.class);
     }
 
     public LiveData<ServerResponse> getAlbumData(String method, String type, String key, String format) {
-        final MutableLiveData<ServerResponse> data = new MutableLiveData<>();
+
         apiRequest.getAlbumData(method,type, key,format)
                 .enqueue(new Callback<ServerResponse>() {
-
-
                     @Override
                     public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                         Log.d(TAG, "onResponse response:: " + response);
@@ -49,4 +47,27 @@ public class AlbumRepository {
                 });
         return data;
     }
+//    public LiveData<ServerResponse> getNewArtistData(String method, String type, String key, String format) {
+//        MutableLiveData<ServerResponse> data = new MutableLiveData<>();
+//        apiRequest = NetworkRequestor.getRetrofitInstance().create(ApiRequest.class);
+//        Log.d("ldflsfls","sdgsgfsfgsgsgsgs");
+//        apiRequest.getAlbumData(method,type, key,format)
+//                .enqueue(new Callback<ServerResponse>() {
+//
+//
+//                    @Override
+//                    public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+//                        Log.d(TAG, "onResponse response:: " + response);
+//                        if (response.body() != null) {
+//                            data.setValue(response.body());
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<ServerResponse> call, Throwable t) {
+//                        data.setValue(null);
+//                    }
+//                });
+//        return data;
+//    }
 }

@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Music World</string>
+    <string name="search_by">Category Filter</string>
+
+    <string-array name="categories">
+        <item>Album</item>
+        <item>Artist</item>
+        <item>Song</item>
+    </string-array>
 </resources>

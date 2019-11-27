@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Results {
 
-    @SerializedName("albummatches")
+    @SerializedName(value = "albummatches",alternate = {"artistmatches"})
     @Expose
     private MethodMatchDetails matchDetails;
 
