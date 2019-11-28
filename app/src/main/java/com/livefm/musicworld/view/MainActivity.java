@@ -34,6 +34,8 @@ import com.livefm.musicworld.reterofit.NetworkRequestor;
 import com.livefm.musicworld.utils.Constants;
 import com.livefm.musicworld.utils.PublishDataModel;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     private String selection = "album";
     private EditText searchText;
     private Button searchButton;
+    private String imgUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,8 +185,17 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     }
     @Override
     public void onClick(View view, int position) {
-        ApiRequest apiRequest =  NetworkRequestor.getRetrofitInstance().create(ApiRequest.class);
-        final String imgUrl;
+
+            getItemData(view,position);
+    }
+
+    /**
+     * Get the clicked item details
+     * @param view
+     * @param position
+     */
+    private void getItemData(View view,int position){
+
         Map<String,String> query = new HashMap<>();
         query.put(Constants.METHOD_SEARCH,selection+Constants.GET_INFO);
         if(selection.equals(Constants.ALBUM) || selection.equals(Constants.TRACK)){
@@ -192,8 +204,17 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         query.put(selection,albumDataModelArrayList.get(position).getName());
         query.put(Constants.API_KEY,NetworkRequestor.API_KEY);
         query.put(Constants.FORMAT_KEY,NetworkRequestor.FORMAT_VAL);
-        Call<DetailsResponse> response = apiRequest.getDetailsInfo(query);
         imgUrl = albumDataModelArrayList.get(position).getImgdtl().get(2).getUrl();
+        makeServerCall(query);
+    }
+
+    /**
+     * This method is used to make a server call to get the details about the selected album
+     * @param query
+     */
+    private void makeServerCall(Map<String,String> query){
+        ApiRequest apiRequest =  NetworkRequestor.getRetrofitInstance().create(ApiRequest.class);
+        Call<DetailsResponse> response = apiRequest.getDetailsInfo(query);
         response.enqueue(new Callback<DetailsResponse>() {
             @Override
             public void onResponse(Call<DetailsResponse> call, Response<DetailsResponse> response) {
@@ -201,13 +222,13 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                 showProgress(false);
                 if (response.body() != null && response.body() instanceof DetailsResponse) {
                     if(response.body().getAlbumDataModel()!=null && response.body().getAlbumDataModel().getWikiDetails()!=null){
-                        Intent intent = new Intent(MainActivity.this,DetailViewActivity.class);
                         PublishDataModel publishDataModel = new PublishDataModel();
                         publishDataModel.setSummary(response.body().getAlbumDataModel().getWikiDetails().getSummary());
                         publishDataModel.setImage_url(imgUrl);
                         publishDataModel.setPublish_date(response.body().getAlbumDataModel().getWikiDetails().getPublished());
-                        intent.putExtra("DataBinding",publishDataModel);
-                        startActivity(intent);
+                        EventBus.getDefault().postSticky(publishDataModel);
+                        launchDetailsView(publishDataModel);
+
                     }else{
                         showPopup();
                     }
@@ -226,6 +247,15 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         });
     }
 
+    /**
+     * This method is used to launch the detail screen
+     * @param publishDataModel
+     */
+    private void launchDetailsView(PublishDataModel publishDataModel){
+        Intent intent = new Intent(MainActivity.this,DetailViewActivity.class);
+        //intent.putExtra("DataBinding",publishDataModel);
+        startActivity(intent);
+    }
     /**
      * Dialog to diaplay if no data available (no summary/results from server)
      */

@@ -14,6 +14,10 @@ import com.bumptech.glide.request.RequestOptions;
 import com.livefm.musicworld.R;
 import com.livefm.musicworld.utils.PublishDataModel;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 public class DetailViewActivity extends AppCompatActivity {
     private TextView publishLbl;
     private TextView summarylbl;
@@ -25,8 +29,8 @@ public class DetailViewActivity extends AppCompatActivity {
         this.getWindow().setFlags(Window.FEATURE_NO_TITLE, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
         setContentView(R.layout.details_info);
-        dataModel = (PublishDataModel) getIntent().getSerializableExtra("DataBinding");
-        Intent intent = getIntent();
+        //dataModel = (PublishDataModel) getIntent().getSerializableExtra("DataBinding");
+        //Intent intent = getIntent();
         publishLbl = (TextView)findViewById(R.id.publishlbl);
         summarylbl = (TextView)findViewById(R.id.summarylbl);
         imageView = (ImageView)findViewById(R.id.imageView);
@@ -34,21 +38,41 @@ public class DetailViewActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onEvent(PublishDataModel event) {
+        updateData(event);
+    }
+
     /**
      * Update view data summary,publish date,album image
      * @param dataModel
      */
     private void updateData(PublishDataModel dataModel){
-        if(dataModel.getPublish_date()!=null)
-            publishLbl.setText(dataModel.getPublish_date());
-        if(dataModel.getSummary()!=null)
-            summarylbl.setText(dataModel.getSummary());
+        if(dataModel!=null){
+            if(dataModel.getPublish_date()!=null)
+                publishLbl.setText(dataModel.getPublish_date());
+            if(dataModel.getSummary()!=null)
+                summarylbl.setText(dataModel.getSummary());
 
-        if(dataModel.getImage_url()!=null){
-            Glide.with(this)
-                    .load(dataModel.getImage_url())
-                    .into(imageView);
+            if(dataModel.getImage_url()!=null){
+                Glide.with(this)
+                        .load(dataModel.getImage_url())
+                        .into(imageView);
 
+            }
         }
+
     }
 }
