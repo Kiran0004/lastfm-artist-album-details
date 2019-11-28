@@ -207,8 +207,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                         publishDataModel.setImage_url(imgUrl);
                         publishDataModel.setPublish_date(response.body().getAlbumDataModel().getWikiDetails().getPublished());
                         intent.putExtra("DataBinding",publishDataModel);
-//                        intent.putExtra("img",imgUrl);
-//                        intent.putExtra("published",response.body().getAlbumDataModel().getWikiDetails().getPublished());
                         startActivity(intent);
                     }else{
                         showPopup();

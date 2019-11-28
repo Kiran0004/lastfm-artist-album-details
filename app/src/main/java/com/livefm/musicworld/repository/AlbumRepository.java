@@ -35,8 +35,6 @@ public class AlbumRepository {
         apiRequest = NetworkRequestor.getRetrofitInstance().create(ApiRequest.class);
         apiRequest.getAlbumData(values)
                     .enqueue(new Callback<ServerResponse>() {
-
-
                         @Override
                         public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                             Log.d(TAG, "onResponse response:: " + response);
