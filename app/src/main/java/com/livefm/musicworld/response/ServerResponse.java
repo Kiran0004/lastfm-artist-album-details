@@ -13,6 +13,7 @@ public class ServerResponse {
     @Expose
     private Results results;
 
+
     public Results getResults() {
         return results;
     }

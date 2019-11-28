@@ -18,6 +18,9 @@ public class AlbumDataModel {
     @SerializedName("image")
     @Expose
     private List<ImageDetails> imgdtl;
+    @SerializedName(value = "wiki",alternate = {"bio"})
+    @Expose
+    private WikiDetails wikiDetails;
     public String getName() {
         return name;
     }
@@ -48,5 +51,13 @@ public class AlbumDataModel {
 
     public void setImgdtl(List<ImageDetails> imgdtl) {
         this.imgdtl = imgdtl;
+    }
+
+    public WikiDetails getWikiDetails() {
+        return wikiDetails;
+    }
+
+    public void setWikiDetails(WikiDetails wikiDetails) {
+        this.wikiDetails = wikiDetails;
     }
 }

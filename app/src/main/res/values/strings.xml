@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Music World</string>
     <string name="search_by">Category Filter</string>
+    <string name="search">Search</string>
 
     <string-array name="categories">
         <item>Album</item>

@@ -4,36 +4,111 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@android:color/black"
     tools:context=".view.MainActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#00c4fa"
+        android:id="@+id/title"
+        android:textStyle="bold"
+        android:textSize="11pt"
+        android:gravity="center_horizontal"
+        android:text="Music Album Details"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:layout_below="@+id/title"
+        android:id="@+id/selectionlbl"
+        android:textSize="8pt"
+        android:text="Select category"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        />
 
     <Spinner
         android:id="@+id/categorySpinner"
-
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/selectionlbl"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:entries="@array/categories"
-        android:prompt="@string/search_by" />
+        android:background="@drawable/selector_spinner"
+        android:layout_height="50dp"
+
+         />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:layout_below="@+id/categorySpinner"
+        android:id="@+id/searchlbl"
+        android:textSize="8pt"
+        android:text="search album/artist/track"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/search_cntr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_below="@+id/searchlbl"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/search_text"
+            android:layout_width="0dp"
+            android:text="beat"
+
+            android:layout_marginLeft="5dp"
+            android:textColor="@android:color/white"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.7"/>
+
+        <Button
+            android:id="@+id/search_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_color"
+            android:layout_marginRight="10dp"
+            android:text="@string/search"/>
+
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progress_circular"
         android:layout_width="wrap_content"
-        android:layout_below="@+id/categorySpinner"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/my_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="60dp"
+        android:layout_below="@+id/search_cntr"
         android:scrollbars="vertical" />
-
 
 </RelativeLayout>

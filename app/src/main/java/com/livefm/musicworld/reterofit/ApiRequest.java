@@ -1,5 +1,6 @@
 package com.livefm.musicworld.reterofit;
 
+import com.livefm.musicworld.response.DetailsResponse;
 import com.livefm.musicworld.response.ServerResponse;
 
 
@@ -23,5 +24,9 @@ public interface ApiRequest {
             @QueryMap Map<String, String> options
 
     );
+    @GET("/2.0/")
+    Call<DetailsResponse> getDetailsInfo(
+            @QueryMap Map<String, String> options
 
+    );
 }
