@@ -70,8 +70,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="1"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:layout_below="@+id/searchlbl"
         android:orientation="horizontal">
 
@@ -79,8 +77,9 @@
             android:id="@+id/search_text"
             android:layout_width="0dp"
             android:text="believe"
-
+            android:background="@drawable/edit_border"
             android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
             android:textColor="@android:color/white"
             android:layout_height="wrap_content"
             android:layout_weight="0.7"/>

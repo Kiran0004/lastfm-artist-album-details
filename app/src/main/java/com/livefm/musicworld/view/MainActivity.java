@@ -124,14 +124,12 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 try {
                     InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 } catch (Exception e) {
                     // TODO: handle exception
                 }
-
                 updateSelection();
             }
         });
@@ -142,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
      * Screen will be refreshed with new items.
      */
     private void  updateSelection(){
+
         showProgress(true);
         // adapter
         adapter = new AlbumDetailsAdapter(this, albumDataModelArrayList);
@@ -166,6 +165,12 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
                             albumDataModelArrayList.addAll(albumDataModels);
                             my_recycler_view.invalidate();
                             adapter.notifyDataSetChanged();
+                            try {
+                                InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                            } catch (Exception e) {
+                                // TODO: handle exception
+                            }
                         }
                     }else{
                         showPopup();
