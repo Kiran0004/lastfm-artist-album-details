@@ -1,6 +1,8 @@
 package com.livefm.musicworld.utils;
 
-public class PublishDataModel {
+import java.io.Serializable;
+
+public class PublishDataModel implements Serializable {
 
     public String image_url;
     public String publish_date;

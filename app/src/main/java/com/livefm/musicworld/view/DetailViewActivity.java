@@ -12,29 +12,43 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.livefm.musicworld.R;
+import com.livefm.musicworld.utils.PublishDataModel;
 
 public class DetailViewActivity extends AppCompatActivity {
+    private TextView publishLbl;
+    private TextView summarylbl;
+    private ImageView imageView;
+    private PublishDataModel dataModel;
     @Override
     public void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.getWindow().setFlags(Window.FEATURE_NO_TITLE, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
-
         setContentView(R.layout.details_info);
+        dataModel = (PublishDataModel) getIntent().getSerializableExtra("DataBinding");
         Intent intent = getIntent();
-        TextView publishLbl = (TextView)findViewById(R.id.publishlbl);
-        TextView summarylbl = (TextView)findViewById(R.id.summarylbl);
-        if(intent.getStringExtra("published")!=null)
-            publishLbl.setText(intent.getStringExtra("published"));
-        if(intent.getStringExtra("wiki_summary")!=null)
-            summarylbl.setText(intent.getStringExtra("wiki_summary"));
-        ImageView imageView = (ImageView)findViewById(R.id.imageView);
-        if(intent.getStringExtra("img")!=null){
+        publishLbl = (TextView)findViewById(R.id.publishlbl);
+        summarylbl = (TextView)findViewById(R.id.summarylbl);
+        imageView = (ImageView)findViewById(R.id.imageView);
+        updateData(dataModel);
+
+    }
+
+    /**
+     * Update view data summary,publish date,album image
+     * @param dataModel
+     */
+    private void updateData(PublishDataModel dataModel){
+        if(dataModel.getPublish_date()!=null)
+            publishLbl.setText(dataModel.getPublish_date());
+        if(dataModel.getSummary()!=null)
+            summarylbl.setText(dataModel.getSummary());
+
+        if(dataModel.getImage_url()!=null){
             Glide.with(this)
-                    .load(intent.getStringExtra("img"))
+                    .load(dataModel.getImage_url())
                     .into(imageView);
 
         }
-
     }
 }
