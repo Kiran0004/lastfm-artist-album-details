@@ -13,7 +13,7 @@ import java.util.List;
 
 public class MethodMatchDetails {
 
-    @SerializedName(value = "album",alternate = {"artist"})
+    @SerializedName(value = "album",alternate = {"artist","track"})
     @Expose
     private List<AlbumDataModel> albumDataModels = null;
 
