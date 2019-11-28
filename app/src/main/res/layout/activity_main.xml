@@ -78,7 +78,7 @@
         <EditText
             android:id="@+id/search_text"
             android:layout_width="0dp"
-            android:text="beat"
+            android:text="believe"
 
             android:layout_marginLeft="5dp"
             android:textColor="@android:color/white"

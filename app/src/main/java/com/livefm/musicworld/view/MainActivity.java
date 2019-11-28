@@ -124,11 +124,14 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InputMethodManager inputManager = (InputMethodManager)
-                        getSystemService(Context.INPUT_METHOD_SERVICE);
 
-                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
+                try {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
+
                 updateSelection();
             }
         });
@@ -156,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                 showProgress(false);
                 if (response.body() != null && response.body() instanceof ServerResponse) {
-                    if(response.body().getResults()!=null){
+                    if(response.body().getResults()!=null && response.body().getResults().getMatchDetails()!=null && response.body().getResults().getMatchDetails().getAlbumDataModels()!=null){
                         List<AlbumDataModel> albumDataModels = ((ServerResponse)response.body()).getResults().getMatchDetails().getAlbumDataModels();
                         if(albumDataModels!=null) {
                             albumDataModelArrayList.clear();

@@ -43,13 +43,18 @@ public class AlbumDetailsAdapter extends RecyclerView.Adapter<AlbumDetailsAdapte
 
     @Override
     public void onBindViewHolder(@NonNull AlbumDetailsAdapter.ViewHolder viewHolder, int i) {
+
         AlbumDataModel albumDataModel = albumDataModelArrayList.get(i);
-        viewHolder.tvTitle.setText(albumDataModel.getName());
-        viewHolder.tvDescription.setText(albumDataModel.getArtist());
-        Glide.with(context)
-                .load(albumDataModel.getImgdtl().get(2).getUrl())
-                .apply(RequestOptions.circleCropTransform())
-                .into(viewHolder.imgViewCover);
+        if(albumDataModel.getName()!=null)
+            viewHolder.tvTitle.setText(albumDataModel.getName());
+        if(albumDataModel.getArtist()!=null)
+            viewHolder.tvDescription.setText(albumDataModel.getArtist());
+        if(albumDataModel.getImgdtl()!=null && albumDataModel.getImgdtl().get(2)!=null && albumDataModel.getImgdtl().get(2).getUrl()!=null) {
+            Glide.with(context)
+                    .load(albumDataModel.getImgdtl().get(2).getUrl())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(viewHolder.imgViewCover);
+        }
     }
 
 
