@@ -3,9 +3,12 @@ package com.livefm.musicworld.reterofit;
 import com.livefm.musicworld.response.ServerResponse;
 
 
+import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 
 /**
@@ -17,9 +20,8 @@ public interface ApiRequest {
 
     @GET("/2.0/")
     Call<ServerResponse> getAlbumData(
-            @Query("method") String query,
-            @Query("album") String album,
-            @Query("api_key") String apikey,
-            @Query("format") String format
+            @QueryMap Map<String, String> options
+
     );
+
 }

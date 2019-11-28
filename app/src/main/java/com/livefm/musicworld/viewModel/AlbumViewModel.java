@@ -10,6 +10,8 @@ import com.livefm.musicworld.repository.AlbumRepository;
 import com.livefm.musicworld.response.ServerResponse;
 import com.livefm.musicworld.reterofit.NetworkRequestor;
 
+import java.util.Map;
+
 
 /**
  * Created by Kiran on 2019-11-27.
@@ -23,13 +25,12 @@ public class AlbumViewModel extends AndroidViewModel {
     private String method;
     private String type;
 
-    public AlbumViewModel(@NonNull Application application,String method,String type) {
+    public AlbumViewModel(@NonNull Application application, Map<String,String> data) {
         super(application);
 
         albumRepository = new AlbumRepository();
-        if(method.equals("album")) {
-            this.articleResponseLiveData = albumRepository.getAlbumData(method + ".search", "believe", NetworkRequestor.API_KEY, NetworkRequestor.FORMAT_VAL);
-        }
+       this.articleResponseLiveData = albumRepository.getAlbumData(data);
+
     }
 
     public LiveData<ServerResponse> getAlbumResponseLiveData() {

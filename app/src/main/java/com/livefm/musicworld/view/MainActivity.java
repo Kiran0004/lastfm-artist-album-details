@@ -3,12 +3,14 @@ package com.livefm.musicworld.view;
 
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,12 +18,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.livefm.musicworld.R;
 import com.livefm.musicworld.adapter.AlbumDetailsAdapter;
 import com.livefm.musicworld.model.AlbumDataModel;
+import com.livefm.musicworld.response.ServerResponse;
 import com.livefm.musicworld.reterofit.ApiRequest;
+import com.livefm.musicworld.reterofit.NetworkRequestor;
 import com.livefm.musicworld.viewModel.AlbumViewModel;
 import com.livefm.musicworld.viewModel.MyViewModelFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -61,9 +71,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selection = parent.getItemAtPosition(position).toString().toLowerCase();
-               // apiRequest = NetworkRequestor.getRetrofitInstance().create(ApiRequest.class);
+                // apiRequest = NetworkRequestor.getRetrofitInstance().create(ApiRequest.class);
                 updateSelection();
-                getAlbumData();
+//                getAlbumData();
             }
 
             @Override
@@ -71,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 selection = parent.getItemAtPosition(0).toString().toLowerCase();
                 //apiRequest = NetworkRequestor.getRetrofitInstance().create(ApiRequest.class);
                 updateSelection();
-                getAlbumData();
+             //   getAlbumData();
             }
         });
         my_recycler_view = (RecyclerView) findViewById(R.id.my_recycler_view);
@@ -86,58 +96,45 @@ public class MainActivity extends AppCompatActivity {
 
         // adapter
         adapter = new AlbumDetailsAdapter(this, albumDataModelArrayList);
-       // my_recycler_view.setAdapter(adapter);
-
-        // View Model
-     //   albumViewModel = ViewModelProviders.of(this, new MyViewModelFactory(this.getApplication(), selection,"believe")).get(AlbumViewModel.class);
-
-    }
-
-    /**
-     * get album/artist details from response
-     *
-     * @param @null
-     */
-    private void getAlbumData() {
-        //articleViewModel.getArticleResponseLiveData().observe();
-        //if(selection.equals("album")){
-           // albumViewModel.getAlbumResponseLiveData().removeObservers(this);
-            albumViewModel.getAlbumResponseLiveData().observe(this, articleResponse -> {
-                if (articleResponse != null) {
-                    progress_circular.setVisibility(View.GONE);
-                    List<AlbumDataModel> albumDataModels = articleResponse.getResults().getMatchDetails().getAlbumDataModels();
-                    if(albumDataModels!=null) {
-                        albumDataModelArrayList.addAll(albumDataModels);
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-            });
-//
-//        }else{
-////            albumViewModel.getArtistResponseLiveData().removeObservers(this);
-//            albumViewModel.getArtistResponseLiveData().observe(this, articleResponse -> {
-//                if (articleResponse != null) {
-//                    progress_circular.setVisibility(View.GONE);
-//                    List<AlbumDataModel> albumDataModels = articleResponse.getResults().getMatchDetails().getAlbumDataModels();
-//                    if(albumDataModels!=null) {
-//                        albumDataModelArrayList.addAll(albumDataModels);
-//                        adapter.notifyDataSetChanged();
-//                    }
-//                }
-//            });
-//
-        //}
 
 
     }
+
 
     private void  updateSelection(){
         // adapter
         adapter = new AlbumDetailsAdapter(this, albumDataModelArrayList);
         my_recycler_view.setAdapter(adapter);
-        MyViewModelFactory myViewModelFactory = new MyViewModelFactory(this.getApplication(),selection,"believe");
-        // View Model
-        albumViewModel = ViewModelProviders.of(this, myViewModelFactory).get(AlbumViewModel.class);
+        ApiRequest apiRequest =  NetworkRequestor.getRetrofitInstance().create(ApiRequest.class);
+        Map<String,String> query = new HashMap<>();
+        query.put("method",selection+".search");
+        query.put(selection,"believe");
+        query.put("api_key",NetworkRequestor.API_KEY);
+        query.put("format",NetworkRequestor.FORMAT_VAL);
+        Call<ServerResponse> response = apiRequest.getAlbumData(query);
+        response.enqueue(new Callback<ServerResponse>() {
+
+
+            @Override
+            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                Log.d(TAG, "onResponse response:: " + response);
+                if (response.body() != null && response.body() instanceof ServerResponse) {
+                    List<AlbumDataModel> albumDataModels = ((ServerResponse)response.body()).getResults().getMatchDetails().getAlbumDataModels();
+                    if(albumDataModels!=null) {
+                        albumDataModelArrayList.clear();
+                        albumDataModelArrayList.addAll(albumDataModels);
+                        my_recycler_view.invalidate();
+                        adapter.notifyDataSetChanged();
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ServerResponse> call, Throwable t) {
+                Log.e(TAG, t.getMessage());
+            }
+        });;
 
     }
 }

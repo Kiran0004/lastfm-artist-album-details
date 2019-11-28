@@ -16,13 +16,13 @@ public class NetworkRequestor {
     public static final String FORMAT_VAL = "json";
 
     public static Retrofit getRetrofitInstance() {
-       // if (retrofit == null) {
+        if (retrofit == null) {
             retrofit = new retrofit2.Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .client(new OkHttpClient())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-       // }
+        }
         return retrofit;
     }
 }

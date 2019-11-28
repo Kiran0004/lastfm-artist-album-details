@@ -10,6 +10,8 @@ import com.livefm.musicworld.response.ServerResponse;
 import com.livefm.musicworld.reterofit.ApiRequest;
 import com.livefm.musicworld.reterofit.NetworkRequestor;
 
+import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,27 +30,28 @@ public class AlbumRepository {
 
     }
 
-    public LiveData<ServerResponse> getAlbumData(String method, String type, String key, String format) {
+    public LiveData<ServerResponse> getAlbumData(Map<String,String> values) {
         MutableLiveData<ServerResponse> data = new MutableLiveData<>();
         apiRequest = NetworkRequestor.getRetrofitInstance().create(ApiRequest.class);
-        Log.d("ldflsfls","sdgsgfsfgsgsgsgs");
-        apiRequest.getAlbumData(method,type, key,format)
-                .enqueue(new Callback<ServerResponse>() {
+        apiRequest.getAlbumData(values)
+                    .enqueue(new Callback<ServerResponse>() {
 
 
-                    @Override
-                    public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
-                        Log.d(TAG, "onResponse response:: " + response);
-                        if (response.body() != null) {
-                            data.setValue(response.body());
+                        @Override
+                        public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                            Log.d(TAG, "onResponse response:: " + response);
+                            if (response.body() != null) {
+                                data.setValue(response.body());
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<ServerResponse> call, Throwable t) {
-                        data.setValue(null);
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<ServerResponse> call, Throwable t) {
+                            data.setValue(null);
+                        }
+                    });
+
+
         return data;
     }
 

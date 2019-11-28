@@ -5,6 +5,6 @@
     <string-array name="categories">
         <item>Album</item>
         <item>Artist</item>
-        <item>Song</item>
+        <item>Track</item>
     </string-array>
 </resources>
